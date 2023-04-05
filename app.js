@@ -5,15 +5,40 @@ const http = require("http")
 const server = http.createServer(app)
 const { Server } = require("socket.io")
 const io = new Server(server)
+const cookieParser = require("cookie-parser")
+const user = require("./controllers/user.socket.controller")
 
 const port = process.env.PORT || 5555
 
-app.get("/", (req, res)=>{
-    res.send("hi")
-})
+app.use(cookieParser())
+app.use(express.urlencoded({extended: true}))
+app.use(express.json())
+app.use(express.static("views"))
+app.set("views", "./views")
+app.set("view engine", "ejs")
+
+const userRoute = require("./routes/user.route")
+const apiRoute = require("./routes/api.route")
+const { randomInt } = require("crypto")
+
+app.use("/", userRoute)
+app.use("/api/v1/", apiRoute)
 
 io.on("connection", (socket)=>{
-    console.log(`A user connected`)
+    if(io.engine.clientsCount > 4){
+        console.log("Limit")
+        socket.disconnect()
+        return
+    }
+    socket.on("user:login", async (msg)=>{
+        console.log("hey")
+        io.emit("user:get", user.login(msg))
+    })
+    socket.on("update:user:room", ()=>{
+        io.emit("user:list", user.update_room(user.status.room_id))
+    })
+
+    // socket.on("disconnect", user.logout(socket.id))
 })
 
 server.listen(port, ()=>{
