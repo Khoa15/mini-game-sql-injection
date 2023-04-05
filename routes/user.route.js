@@ -6,7 +6,7 @@ const authe = require("../middlewares/authentication")
 
 Router.get("/", authe.authentication, user.login_view)
 
-Router.get("/exercise", authe.authentication, user.exercise_view)
+
 
 const user_io = require("../controllers/user.socket.controller")
 

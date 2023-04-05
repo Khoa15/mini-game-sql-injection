@@ -28,9 +28,3 @@ exports.login_view = async (req, res) => {
     res.render("login", {data})
 }
 
-exports.exercise_view = async (req, res) => {
-    const data = {
-        title: 'Queue\' Exercise',
-    }
-    res.render("test/queue", {data})
-}

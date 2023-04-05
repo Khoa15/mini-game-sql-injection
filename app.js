@@ -18,10 +18,12 @@ app.set("views", "./views")
 app.set("view engine", "ejs")
 
 const userRoute = require("./routes/user.route")
+const exerciseRoute = require("./routes/exercise.route")
 const apiRoute = require("./routes/api.route")
 const { randomInt } = require("crypto")
 
 app.use("/", userRoute)
+app.use("/exercise", exerciseRoute)
 app.use("/api/v1/", apiRoute)
 
 io.on("connection", (socket)=>{
