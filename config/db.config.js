@@ -1,22 +1,36 @@
 const mysql = require("mysql")
-
-function conn() {
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "12345678",
-        port: 3306,
-        database: null
+class Conn{
+  constructor(
+    host = "localhost", 
+    user="root", 
+    password = "12345678", 
+    port = 3306, 
+    database = "id15865915_2hkdb"){
+    this.connection = mysql.createConnection({
+      host: host,
+      user: user,
+      password: password,
+      port: port,
+      database: database
     })
-    return {
-      query( sql, args ) {
-        return util.promisify( connection.query )
-          .call( connection, sql, args );
-      },
-      close() {
-        return util.promisify( connection.end ).call( connection );
-      }
-    };
   }
 
+  deconstructor(){
+    this.connection.close()
+  }
+
+  query(q){
+    return new Promise((resolve, reject) => {
+      const handler = (error, result) =>{
+        if(error){
+          reject(error)
+          return
+        }
+        resolve(result)
+      }
+      this.connection.query(q, handler)
+    })
+  }
+}
+const conn = new Conn()
 module.exports = conn

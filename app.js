@@ -20,11 +20,13 @@ app.set("view engine", "ejs")
 const userRoute = require("./routes/user.route")
 const exerciseRoute = require("./routes/exercise.route")
 const apiRoute = require("./routes/api.route")
+const { handleError } = require("./middlewares/handleError")
 const { randomInt } = require("crypto")
 
 app.use("/", userRoute)
 app.use("/exercise", exerciseRoute)
 app.use("/api/v1/", apiRoute)
+app.use(handleError)
 
 io.on("connection", (socket)=>{
     if(io.engine.clientsCount > 4){

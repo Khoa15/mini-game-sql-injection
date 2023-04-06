@@ -10,14 +10,17 @@ exports.authentication = async (req, res, next) =>{
             return
         }
         next()
+        return
     }else{
         if (req.originalUrl === "/"){
             next()
             return
         }
         res.status(404)
+        return
     }
     next()
+    return
 }
 
 exports.limitConnection = async (req, res, next)=>{
