@@ -29,7 +29,7 @@ async function addUserQueue(data = []){
     $("#counter-user").html(users.count)
 }
 if(queue.length){
-    socket.emit("update:user:room")
+    socket.emit("user:update:room", socket.id)
     socket.on("user:list", (res=[])=>{
         if(users.step === 0 )addUserQueue(res)
         users.step += 1

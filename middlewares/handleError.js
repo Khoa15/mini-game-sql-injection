@@ -18,7 +18,7 @@ exports.handleError = (err, req, res, next) => {
         err.statusCode = 404
         err.message = `The ${req.originalUrl} is not found`
     }
-    res.status(err.statusCode).json({
+    res.status(500).json({
         success: false,
         message: err.message
     })

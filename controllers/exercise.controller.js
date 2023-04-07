@@ -6,12 +6,13 @@ exports.queue_view = async (req, res) => {
     res.render("test/queue", {data})
 }
 
-exports.stage_view = async (req, res) => {
+exports.stage_view = async (req, res, next) => {
     const stage = req.params["stage"]
     const data = {
         title: 'Stage '+stage
     }
-    res.render("test/stage", {data})
+    res.status(200).render("test/stage", {data})
+    return
 }
 
 exports.stage_submit = async (req, res, next) => {
@@ -22,7 +23,8 @@ exports.stage_submit = async (req, res, next) => {
             const password = req.body['password']
             const user = new User({username: username, password: password})
             const result = await user.login()
-            res.json(result)
+            res.status(200).json(result)
+            return
         }
         res.redirect("./"+stage)
     } catch (error) {

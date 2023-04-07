@@ -36,6 +36,33 @@
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function(){
+            $("form#form_login_st1").submit(function(e){
+                e.preventDefault()
+                var formData = {
+                    "username": $("input[name='username']").val(),
+                    "password": $("input[name='password']").val(),
+                }
+                axios.post("/exercise/1/stage/1", formData).then((res) => {
+                    $("#box-res-api").html(JSON.stringify(res["data"], null, 4))
+                    $("#box-your-data-form").html(JSON.stringify(formData, null, 4))
+                }).catch((err)=>{
+                    $("#box-res-api").html(JSON.stringify(err.response.data, null, 4))
+
+                })
+            })
+        })
+        // document.querySelector("form#form_login_st1").addEventListener("submit", function(e){
+        //     e.preventDefault()
+        //     axios.post("/exercise/1/stage/1", {
+        //         "username": $("input[name='username']").val(),
+        //         "password": $("input[name='password']").val(),
+        //     }).then((res) => {
+        //         $("#box-result").html(JSON.stringify(res))
+        //     })
+        // })
+    </script>
 
     <%- include("../../partials/footer") -%>
 
