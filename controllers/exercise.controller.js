@@ -23,7 +23,17 @@ exports.stage_submit = async (req, res, next) => {
             const password = req.body['password']
             const user = new User({username: username, password: password})
             const result = await user.login()
-            res.status(200).json(result)
+            let msg = "Login successfully"
+            let stsCode = 1
+            if (result.length === 0){
+                msg = "Your username and your password were wrong"
+                stsCode = 0
+            }
+            res.status(200).json({
+                "status": stsCode,
+                "message": msg,
+                "data": result
+            })
             return
         }
         res.redirect("./"+stage)
