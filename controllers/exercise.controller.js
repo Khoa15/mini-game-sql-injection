@@ -11,7 +11,8 @@ exports.stage_view = async (req, res, next) => {
     const data = {
         title: 'Stage '+stage
     }
-    res.status(200).render("test/stage", {data})
+    console.log("test/stage_"+stage)
+    res.status(200).render("test/stage_"+stage, {data})
     return
 }
 

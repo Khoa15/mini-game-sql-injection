@@ -3,9 +3,9 @@ class Conn{
   constructor(
     host = "localhost", 
     user="root", 
-    password = "12345678", 
+    password = "", 
     port = 3306, 
-    database = "id15865915_2hkdb"){
+    database = "db_library_dev"){
     this.connection = mysql.createConnection({
       host: host,
       user: user,
