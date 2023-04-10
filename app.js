@@ -19,11 +19,13 @@ app.set("views", "./views")
 app.set("view engine", "ejs")
 
 const userRoute = require("./routes/user.route")
+const adminRoute = require("./routes/admin.route")
 const exerciseRoute = require("./routes/exercise.route")
 const apiRoute = require("./routes/api.route")
 const { handleError } = require("./middlewares/handleError")
 
 app.use("/", userRoute)
+app.use("/control", adminRoute)
 app.use("/exercise", exerciseRoute)
 app.use("/api/v1/", apiRoute)
 app.use(handleError)

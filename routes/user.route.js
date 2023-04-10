@@ -6,12 +6,4 @@ const authe = require("../middlewares/authentication")
 
 Router.get("/", authe.authentication, user.login_view)
 
-
-
-const user_io = require("../controllers/user.socket.controller")
-
-Router.get("/get", (req, res)=>{
-  res.send(user_io.users)
-})
-
 module.exports = Router

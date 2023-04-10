@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("../../partials/header") -%>
+    <style>
+        html,body{
+            height: 100%;
+        }
+        body{
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="w-100 m-auto">
+        <form action="./control" method="post" class="w-25 m-auto">
+            <div class="input-group mb-3">
+                <input type="password" name="key_private" class="form-control" placeholder="Key">
+                <button class="btn btn-primary">Sign In</button>
+            </div>
+        </form>
+    </div>
+
+    <%- include("../../partials/footer") -%>
+</body>
+</html>
