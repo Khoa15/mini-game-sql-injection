@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("../../partials/header") -%>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">Users</div>
+                        <div class="card-text">
+                            10
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">Current Queue</div>
+                        <div class="card-subtitle">Stage: <span>1</span></div>
+                        <div class="card-text">
+                            10
+                        </div>
+                        <a href="#" class="card-link">Start</a>
+                        <a href="#" class="card-link">Next Stage</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">User Passed</div>
+                        <div class="card-text">
+                            13
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">User Failed</div>
+                        <div class="card-text">
+                            13
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <h1 class="text-center">Current Stage <span>1</span></h1>
+            
+            <div class="col-lg-12">
+                show list Users
+                <button type="button" class="btn btn-primary position-relative">
+                    Profile
+                    <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                      <span class="visually-hidden">New alerts</span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <%- include("../../partials/footer") -%>
+</body>
+</html>

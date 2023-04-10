@@ -1,3 +1,5 @@
+require("dotenv").config()
+const jwt = require("jsonwebtoken")
 exports.view_signin = (req, res, next)=>{
     try{
         const data = {
@@ -23,6 +25,18 @@ exports.signIn = async(req, res, next) =>{
             next(err)
             return
         }
+        const maxAge = 30*24*60*60
+        const token = jwt.sign({
+            "username": "admin",
+            "room_id": NaN,
+            "key_private": "123Admin456",
+        }, process.env.KEY_PRIVATE,
+        {
+            expiresIn: maxAge
+        })
+
+        res.cookie("accessToken", token, {expiresIn: maxAge * 1000})
+
         res.json({
             "sts": 1,
             "message": "Sign-in successfully!"

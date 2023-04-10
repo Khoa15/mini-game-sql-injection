@@ -7,8 +7,9 @@ exports.login = async (req, res)=>{
         const room_id = req.body.room_id
         const maxAge = 30 * 24 * 60 * 60
         const token = await jwt.sign({
-                        username: username,
-                        room_id: room_id
+                        "username": username,
+                        "room_id": room_id,
+                        "key_private": None,
                     }, process.env.PRIVATE_KEY,
                     {
                         expiresIn: maxAge
