@@ -4,9 +4,31 @@
     <%- include("../../partials/header") -%>
 </head>
 <body>
+    <nav id="navbar-page-stage" class="navbar bg-body-tertiary px-3 justify-content-center fixed-bottom">
+        <ul class="nav nav-pills gap-2">
+          <li class="nav-item">
+            <a class="nav-link" href="#pageStage1">First</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#pageStage2">Second</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#pageStage3">Third</a>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-outline-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Current status">Queue</button>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-primary">Start</button>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-primary">Next</button>
+          </li>
+        </ul>
+    </nav>
     <div class="container">
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">Users</div>
@@ -16,20 +38,17 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <div class="card">
                     <div class="card-body">
-                        <div class="card-title">Current Queue</div>
-                        <div class="card-subtitle">Stage: <span>1</span></div>
+                        <div class="card-title">Stage</div>
                         <div class="card-text">
-                            10
+                            0/3
                         </div>
-                        <a href="#" class="card-link">Start</a>
-                        <a href="#" class="card-link">Next Stage</a>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">User Passed</div>
@@ -39,7 +58,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">User Failed</div>
@@ -51,21 +70,142 @@
             </div>
         </div>
     </div>
-    <div class="container">
-        <div class="row">
-            <h1 class="text-center">Current Stage <span>1</span></h1>
-            
-            <div class="col-lg-12">
-                show list Users
-                <button type="button" class="btn btn-primary position-relative">
-                    Profile
-                    <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
-                      <span class="visually-hidden">New alerts</span>
-                    </span>
-                </button>
+    <div data-bs-spy="scroll" data-bs-target="#navbar-page-stage">
+        <div class="container" style="height: 100vh">
+            <div class="row">
+                <h1 class="text-center" id="pageStage1">Stage 1</h1>
+                <h3>Topic: Hi</h3>
+                <div class="col-lg-8">
+                    <div class="d-flex gap-2 flex-wrap" id="l-user-st-1">
+    
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <ol>
+                        <li>Khoa <span class="badge text-bg-danger">10.000đ</span></li>
+                        <li>Khoa <span class="badge text-bg-success">10.000đ</span></li>
+                        <li>Khoa <span class="badge text-bg-primary">10.000đ</span></li>
+                        <li>Khoa <span class="badge text-bg-light">10.000đ</span></li>
+                    </ol>
+                </div>
             </div>
         </div>
+        <div class="container" style="height: 100vh">
+            <div class="row">
+                <h1 class="text-center" id="pageStage2">Stage <span>2</span></h1>
+                <h3>Topic: Hi</h3>
+                <div class="col-lg-8">
+                    <div class="d-flex gap-2 flex-wrap" id="l-user-st-2">
+    
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <ol>
+                        <li></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="container" style="height: 100vh">
+            <div class="row">
+                <h1 class="text-center" id="pageStage3">Stage <span>3</span></h1>
+                <h3>Topic: Hi</h3>
+                <div class="col-lg-8">
+                    <div class="d-flex gap-2 flex-wrap" id="l-user-st-3">
+                        
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <ol>
+                        <li></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
     </div>
+
+
     <%- include("../../partials/footer") -%>
+    <script>
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        const currStage = {
+            cStage: 1,
+            next: function () {
+                this.cStage += 1
+                return this.cStage
+            },
+            start: function() {
+                return this.cStage
+            }
+        }
+        const stage = {
+            data: [
+                {
+                    "stage": 1,
+                    "element": $("#l-user-st-1"),
+                    "topic": "",
+                    "status": ["Queue", "Fighting", "End"],
+                    "users": []
+                },
+                {
+                    "stage": 2,
+                    "element": $("#l-user-st-2"),
+                    "topic": "",
+                    "status": ["Queue", "Fighting", "End"],
+                    "users": []
+                },
+                {
+                    "stage": 3,
+                    "element": $("#l-user-st-3"),
+                    "topic": "",
+                    "status": ["Queue", "Fighting", "End"],
+                    "users": []
+                },
+            ],
+            append: function(user){
+                this.data[currStage.cStage - 1]["users"].push(user)
+            },
+            getElement: function(stage){
+                return this.data[stage-1]["element"]
+            }
+        }
+        socket.on("user:get", (res)=>{
+            try{
+                let user = res[0]
+                user = {
+                    "name": user["name"],
+                    "score": 0,
+                    "time": 0,
+                    "isSuccess": false
+                }
+                stage.append(user)
+                appendUserOnStage(user, currStage.cStage)
+            }catch(err){
+                console.log(err)
+            }
+        })
+        function appendUserOnStage(user, cStage){
+            const errorPill = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                    </svg>`
+            const successPill = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                    </svg>`
+            const html = `
+            <span class="badge d-flex align-items-center p-2 pe-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-pill">
+                <span id="b-username">${user["name"]}</span>
+                <span class="vr mx-2"></span>
+                <a href="#">
+                    ${user["isSuccess"] ? successPill : errorPill}
+                </a>
+            </span>
+            `
+            stage.getElement(cStage).append(html)
+        }
+    </script>
 </body>
 </html>

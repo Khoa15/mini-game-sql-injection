@@ -7,7 +7,6 @@ const server = http.createServer(app)
 // const io = new Server(server)
 const io = require("socket.io")(server)
 const cookieParser = require("cookie-parser")
-const user = require("./controllers/user.socket.controller")(io)
 
 const port = process.env.PORT || 5555
 
@@ -29,6 +28,9 @@ app.use("/control", adminRoute)
 app.use("/exercise", exerciseRoute)
 app.use("/api/v1/", apiRoute)
 app.use(handleError)
+
+const stage = require("./models/stage.model")
+const user = require("./controllers/user.socket.controller")(io, stage)
 
 const onConnection = (socket) => {
     if(io.engine.clientsCount > 4){

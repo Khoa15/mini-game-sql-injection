@@ -1,6 +1,6 @@
 const User = require("../models/user.model")
 
-function UserSocket(io){
+function UserSocket(io, stage){
     const users = {}
     let status = []
 
@@ -12,6 +12,8 @@ function UserSocket(io){
             users[user.room_id] = []
         }
         users[user.room_id].push(user)
+        stage.appendUser(user)
+        console.log(stage)
         io.emit("user:get", [user])
         return [user]
     }

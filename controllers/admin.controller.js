@@ -11,6 +11,23 @@ exports.view_signin = (req, res, next)=>{
     }
 }
 
+exports.view_panel = (req, res, next) => {
+    try{
+        const err = new Error()
+        if("accessToken" in req.cookies === false){
+            err.statusCode = 500
+            next(err)
+            return
+        }
+        const data = {
+            title: "Control Panel"
+        }
+        res.render("admin/control", {data})
+    }catch(err){
+        next(err)
+    }
+}
+
 exports.signIn = async(req, res, next) =>{
     try{
         const err = new Error("Some problem are occured!")
@@ -30,13 +47,12 @@ exports.signIn = async(req, res, next) =>{
             "username": "admin",
             "room_id": NaN,
             "key_private": "123Admin456",
-        }, process.env.KEY_PRIVATE,
+        }, process.env.PRIVATE_KEY,
         {
             expiresIn: maxAge
         })
 
         res.cookie("accessToken", token, {expiresIn: maxAge * 1000})
-
         res.json({
             "sts": 1,
             "message": "Sign-in successfully!"
