@@ -6,11 +6,18 @@ let users = {
     step: 0,
     data: []
 }
+let user = {}
 if(form_login.length){
-    form_login.on("submit", function(e){
-        const username = $("input[name='username']").val()
-        const room_id = $("input[name='room_id']").val()
-        socket.emit("user:login", {id: socket.id, name: username, room_id: room_id})
+    $(document).ready(function(){
+        $("form").submit(function(e){
+            e.preventDefault()
+            axios.post("/api/v1/login", {username: $("#username").val()}).then(function(res){
+                const username = $("input[name='username']").val()
+                const token = res.data.accessToken
+                socket.emit("user:login", {id: token, name: username, room_id: null})
+                localStorage.setItem("accessToken", token)
+            })
+        })
     })
 }
 async function addUserQueue(data = []){
@@ -39,4 +46,8 @@ socket.on("user:get", (res)=>{
     if(queue.length){
         addUserQueue(res)
     }
+})
+socket.on("admin:start", ()=>{
+    users.data[users.data.findIndex(u => u.id == localStorage.getItem("accessToken"))].stage.cur = 1
+    window.location = "/exercise/1/stage/1"
 })

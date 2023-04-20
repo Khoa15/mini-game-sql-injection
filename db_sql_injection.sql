@@ -1,3 +1,5 @@
+USE sql_injection;
+
 CREATE TABLE users(
     id INT IDENTITY(1,1) PRIMARY KEY,
     username varchar(50),
@@ -17,3 +19,25 @@ VALUES ('alice', 'jkl159'),
        ('heidi', 'ghj123'),
        ('ivan', 'vbn456'),
        ('judy', 'fgh789');
+
+DROP TABLE sql_injection.dbo.users;
+
+CREATE TABLE sql_injection.dbo.users (
+	id INT IDENTITY(1,1) PRIMARY KEY,
+    accessKey varchar(100)
+);
+
+DECLARE @i int = 0;
+WHILE @i < 10
+BEGIN
+    DECLARE @length int = ROUND(RAND() * 99 + 1, 0);
+    DECLARE @key varchar(100) = '';
+    DECLARE @j int = 0;
+    WHILE @j < @length
+    BEGIN
+        SET @key = @key + CHAR(ROUND(RAND() * 25 + 65, 0));
+        SET @j = @j + 1;
+    END
+    INSERT INTO sql_injection.dbo.users (accessKey) VALUES (@key);
+    SET @i = @i + 1;
+END

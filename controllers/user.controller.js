@@ -11,12 +11,37 @@ exports.login = async (req, res)=>{
                         "username": username,
                         "room_id": NaN,
                         "key_private": NaN,
+                        "stage":[
+                            {
+                                "status": false,
+                                "endTime": 0,
+                            },
+                            {
+                                "status": false,
+                                "endTime": 0,
+                            },
+                            {
+                                "status": false,
+                                "endTime": 0,
+                            },
+                            {
+                                "status": false,
+                                "endTime": 0,
+                            },
+                            {
+                                "status": false,
+                                "endTime": 0,
+                            },
+                        ]
                     }, process.env.PRIVATE_KEY,
                     {
                         expiresIn: maxAge
                     })
         res.cookie("accessToken", token, {expiresIn: maxAge * 1000})
-        res.redirect("/")
+        res.send({
+            "sts": 1,
+            "accessToken": token
+        })
     }catch(err){
         res.send(err)
     }
@@ -35,4 +60,11 @@ exports.home_view = async(req, res)=>{
         title: 'Demo SQLi',
     }
     res.render("home", {data})
+}
+
+exports.scoreboard_view = async(req, res)=>{
+    const data ={
+        title: "Scoreboard"
+    }
+    res.render("scoreboard", {data})
 }

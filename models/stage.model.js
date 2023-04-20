@@ -1,19 +1,12 @@
 const Stage = {
     status: 0,
     curStage: 1,
-    maxStage: 3,
+    maxStage: 5,
     ttUsers: 0,
     data: [
         {
             "topic": "",
-            "users":[
-                {
-                    "name": "",
-                    "score": 0,
-                    "time": 0,
-                    "status": 0,
-                }
-            ]
+            "users":[]
         }
     ],
     next: function() {

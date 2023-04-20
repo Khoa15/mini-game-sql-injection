@@ -1,5 +1,5 @@
 const User = require("../models/user.model")
-
+const axios = require("axios")
 function UserSocket(io, stage){
     const users = {}
     let status = []
@@ -13,7 +13,7 @@ function UserSocket(io, stage){
         }
         users[user.room_id].push(user)
         stage.appendUser(user)
-        console.log(stage)
+        console.log(user)
         io.emit("user:get", [user])
         return [user]
     }
@@ -29,16 +29,21 @@ function UserSocket(io, stage){
 
     const update_room = (room_id) => {
         room_id = status.room_id
-        console.log("Greay", status)
-        io.emit("user:list", users[room_id] || [])
+        io.emit("user:list", stage.getCurStage()["users"] || [])
         return users[room_id]
+    }
+
+    const next_stage = (accessToken) =>{
+        stage.getCurStage()["users"][stage.getCurStage()["users"].findIndex(u => u.id == accessToken)].stage.cur += 1
+        
     }
 
     return{
         login,
         find,
         logout,
-        update_room
+        update_room,
+        next_stage
     }
 }
 

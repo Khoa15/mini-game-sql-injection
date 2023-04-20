@@ -5,5 +5,5 @@ const authe = require("../middlewares/authentication")
 
 
 Router.get("/", authe.authentication, user.login_view)
-
+Router.get("/scoreboard", authe.authentication, user.scoreboard_view)
 module.exports = Router

@@ -3,6 +3,7 @@ const express = require("express")
 const app = express()
 const http = require("http")
 const server = http.createServer(app)
+const cors = require('cors')
 // const { Server } = require("socket.io")
 // const io = new Server(server)
 const io = require("socket.io")(server)
@@ -23,6 +24,7 @@ const exerciseRoute = require("./routes/exercise.route")
 const apiRoute = require("./routes/api.route")
 const { handleError } = require("./middlewares/handleError")
 
+app.use(cors())
 app.use("/", userRoute)
 app.use("/control", adminRoute)
 app.use("/exercise", exerciseRoute)
@@ -41,6 +43,10 @@ const onConnection = (socket) => {
     
     socket.on("user:login", user.login)
     socket.on("user:update:room", user.update_room)
+    socket.on("user:next-stage", user.next_stage)
+    socket.on("admin:start", ()=>{
+        io.emit("admin:start")
+    })
 
     // socket.on("disconnect", user.logout(socket.id))
 }

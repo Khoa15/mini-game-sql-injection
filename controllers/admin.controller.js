@@ -20,7 +20,8 @@ exports.view_panel = (req, res, next) => {
             return
         }
         const data = {
-            title: "Control Panel"
+            title: "Control Panel",
+            admin: false,
         }
         res.render("admin/control", {data})
     }catch(err){

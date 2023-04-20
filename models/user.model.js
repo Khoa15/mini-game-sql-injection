@@ -16,6 +16,9 @@ class User{
         this.room_id = room_id
         this.score = score
         this.status = status
+        this.stage = {
+            cur: 0,
+        }
         this.username = username
         this.password = password
     }

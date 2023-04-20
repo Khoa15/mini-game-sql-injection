@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("../../partials/header") -%>
+    <style>
+        html,body,#con_stage_1, #con_stage_1 .row{
+            height: 100%;
+        }
+        body{
+            background: url('/assets/imgs/bg_ex_stage_1(1).jpg') center bottom / cover no-repeat fixed;
+        }
+        #con_stage_1 .row{
+            display: flex;
+            align-items: center;
+        }
+
+    </style>
+</head>
+<body>
+    <%- include("../../partials/user/helper-exercise.ejs") -%>
+    <div class="container" id="con_stage_1">
+        <div class="row">
+            <div class="col-lg-6 m-auto">
+                <form action="" method="post" id="form_login_st1" class="mb-5 bg-light bg-opacity-25 shadow border border-secondary rounded-5 px-5 py-5 position-relative">
+                    <div class="bg-secondary bg-opacity-25 shadow position-absolute top-0 start-0 h-75 rounded-5 w-100 d-flex justify-content-center align-items-center" id="box_disabled_stage">
+                        DISABLED
+                    </div>
+                    <h3 id="title"></h3>
+                    <div class="form-group mb-3">
+                        <label for="user_st1">Username:</label>
+                        <input type="text" id="user_st1" name="username" class="form-control" placeholder="Type your username">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="pass_st1">Password:</label>
+                        <input type="password" id="pass_st1" name="password" class="form-control" placeholder="Type your password">
+                    </div>
+                    <% if(data.status.status == 1){ %>
+                        <p class="text-success">Sloved</p>
+                    <% } %>
+                    <button class="btn btn-primary rounded-5">Submit</button>
+                    <% if(data.stage == 5){ %>
+                        <a type="button" id="" href="/scoreboard">Done</a>
+                    <% }else{ %>
+                        <a type="button" id="btn-next-stage" href="/exercise/1/stage/<%= Number(data.stage) + 1 %>">Next</a>
+                    <% } %>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        const user ={
+            currStage: Number(<%= data.stage - 1 %>),
+            stage: [
+                {
+                    topic: "Error",
+                    title: "",
+                    goal: "",
+                    hint: [],
+                    status: 1,
+                },
+                {
+                    topic: "Union",
+                    title: "",
+                    goal: "",
+                    hint: [],
+                    status: 1,
+                },
+                {
+                    topic: "Boolean",
+                    title: "",
+                    goal: "Response from server is true or false",
+                    hint: [],
+                    status: 1,
+                },
+                {
+                    topic: "Time",
+                    title: "",
+                    goal: "Response from server is about 10000ms",
+                    hint: [
+                        "'; WAITFOR DELAY '0:0:10';--",
+                        "'; IF (SELECT COUNT(username) FROM users WHERE username = 'alice' AND SUBSTRING(password, $range$, 1) = '$$') = 1 WAITFOR DELAY '0:0:5'--"],
+                        status: 1,
+                },
+                {
+                    topic: "Out of band",
+                    title: "",
+                    goal: "Try access to C driver",
+                    hint: [],
+                    status: 0,
+                }
+            ],
+            getCurStage: function(){
+                return this.stage[this.currStage]
+            },
+            submit: []
+        }
+        $(document).ready(function(){
+            console.log(user.getCurStage())
+            if(user.getCurStage().status == 1){
+                $("#box_disabled_stage").addClass("d-none")
+            }
+            $("#title").text(user.getCurStage()["topic"]+": "+user.getCurStage()["goal"])
+            $("form#form_login_st1").submit(function(e){
+                e.preventDefault()
+                var formData = {
+                    "username": $("input[name='username']").val(),
+                    "password": $("input[name='password']").val(),
+                }
+                $("#box-your-data-form").html(JSON.stringify(formData, null, 4))
+                user["submit"].push(formData)
+                sendRequest(formData)
+            })
+            $("#btn-bf-th").click(async function(){
+                var formData = {
+                    "username": $("input[name='username']").val(),
+                    "password": $("input[name='password']").val(),
+                }
+                user["submit"].push(formData)
+                const letters = $("#bf-th-letters").val()
+                const minL = Number($("#bf-th-min").val())
+                const maxL = Number($("#bf-th-max").val())
+                //Brute Force
+                let found = ""
+                let username = formData["username"]
+                for(let m = 0; m < maxL; m++){
+                    for(let i = 0; i < letters.length; i++){
+                        formData["username"] = username.replace("$$", letters[i]).replace("$range$", m+1)
+                        const startTime = Date.now()
+                        const res = await axios.post("/exercise/1/stage/<%= data.stage %>", formData)//sendRequest(formData)
+                        res["data"]["timing"] = Date.now() - startTime
+                        if(res["data"]["timing"]){
+                            $("#list-response tbody").append(`
+                            <tr>
+                                <td>${res["data"]["timing"]}</td>
+                                <td>${letters[i]}</td>
+                            </tr>
+                            `)
+                            // break
+                        }
+                    }
+                }
+            })
+            $("#btn-next-stage").click(function(){
+                socket.emit("user:next-stage", localStorage.getItem("accessToken"))
+            })
+        })
+
+        function sendRequest(formData){
+            const startTime = Date.now()
+            axios.post("/exercise/1/stage/<%= data.stage %>", formData).then((res) => {
+                res["data"]["timing"] = Date.now() - startTime
+                $("#box-res-api").html(JSON.stringify(res["data"], null, 4))
+                return res
+            }).catch((err)=>{
+                $("#box-res-api").html(JSON.stringify(err.response.data, null, 4))
+                return 0
+            })
+        }
+    </script>
+
+    <%- include("../../partials/footer") -%>
+
+</body>
+</html>

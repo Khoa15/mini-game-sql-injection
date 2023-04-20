@@ -26,35 +26,53 @@ const stage = {
             "users": []
         },
     ],
+    getCurrStage: function(){
+        return this.data[this.cStage - 1]
+    },
     append: function(user){
+        if(this.getCurrStage().users.find(u => u.id == user.id)){
+            return false
+        }
         this.data[currStage.cStage - 1]["users"].push(user)
+        return true
     },
     getElementHTML: function(stage){
         return this.data[stage-1]["element"]
     },
     start: function(){
-        socket.emit("admin:start", (cStage))
-        
+        socket.emit("admin:start", (this.cStage))
     },
 }
 
+socket.emit("user:update:room", "admin")
+socket.on("user:list", (res=[])=>{
+    res.forEach(user=> appendUser(user))
+})
 socket.on("user:get", (res)=>{
     try{
-        let user = res[0]
-        user = {
-            "name": user["name"],
-            "score": 0,
-            "time": 0,
-            "isSuccess": false
-        }
-        stage.append(user)
-        appendUserOnStage(user, currStage.cStage)
+        appendUser(res[0])
     }catch(err){
         console.log(err)
     }
 })
 
-function appendUserOnStage(user, cStage){
+function appendUser(user){
+    user = {
+        "id": user["id"],
+        "name": user["name"],
+        "score": 0,
+        "time": 0,
+        "stage": {
+            cur: 0,
+            stage: []
+        }
+    }
+    if(stage.append(user)){
+        appendUserOnStage(user)
+    }
+}
+
+function appendUserOnStage(user, cStage = 1){
     const errorPill = `
     <div class="spinner-grow spinner-grow-sm text-light" role="status">
         <span class="visually-hidden">Loading...</span>
@@ -68,9 +86,24 @@ function appendUserOnStage(user, cStage){
         <span id="b-username">${user["name"]}</span>
         <span class="vr mx-2"></span>
         <a href="#">
-            ${user["isSuccess"] ? successPill : errorPill}
+            ${user["stage"].cur ? user["stage"].cur : errorPill}
         </a>
     </span>
     `
     stage.getElementHTML(cStage).append(html)
 }
+
+function listUserOnStage(){
+    stage.getCurrStage().users.forEach(u => {
+        appendUserOnStage(u)
+    })
+}
+
+$(document).ready(function(){
+    $("#btn-start-stage").click(function(){
+        stage.start()
+        stage.getCurrStage().users.forEach(u => u["stage"].cur += 1)
+        stage.getElementHTML(1).html("")
+        listUserOnStage()
+    })
+})
