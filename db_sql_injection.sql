@@ -1,3 +1,7 @@
+USE master;
+ALTER DATABASE sql_injection SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+DROP DATABASE sql_injection;
+CREATE DATABASE sql_injection;
 USE sql_injection;
 
 CREATE TABLE users(
@@ -20,24 +24,25 @@ VALUES ('alice', 'jkl159'),
        ('ivan', 'vbn456'),
        ('judy', 'fgh789');
 
-DROP TABLE sql_injection.dbo.users;
 
-CREATE TABLE sql_injection.dbo.users (
-	id INT IDENTITY(1,1) PRIMARY KEY,
-    accessKey varchar(100)
+
+
+CREATE TABLE keys (
+	id INT PRIMARY KEY IDENTITY(1,1),
+    accessKey varchar(10)
 );
 
 DECLARE @i int = 0;
 WHILE @i < 10
 BEGIN
-    DECLARE @length int = ROUND(RAND() * 99 + 1, 0);
-    DECLARE @key varchar(100) = '';
+    DECLARE @length int = FLOOR(RAND() * (6)) + 5; -- random length between 5 and 10
+    DECLARE @accessKey varchar(10) = '';
     DECLARE @j int = 0;
     WHILE @j < @length
     BEGIN
-        SET @key = @key + CHAR(ROUND(RAND() * 25 + 65, 0));
+        SET @accessKey = @accessKey + CHAR(FLOOR(RAND() * (123 - 97)) + 97); -- random lowercase letter
         SET @j = @j + 1;
     END
-    INSERT INTO sql_injection.dbo.users (accessKey) VALUES (@key);
+    INSERT INTO keys (accessKey) VALUES (@accessKey);
     SET @i = @i + 1;
 END

