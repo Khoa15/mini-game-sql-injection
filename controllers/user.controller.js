@@ -30,3 +30,9 @@ exports.login_view = async (req, res) => {
     res.render("login", {data})
 }
 
+exports.home_view = async(req, res)=>{
+    const data = {
+        title: 'Demo SQLi',
+    }
+    res.render("home", {data})
+}

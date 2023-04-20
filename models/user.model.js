@@ -29,8 +29,8 @@ class User{
     }
 
     async login(){
-        let q = `SELECT * FROM ${this.#table} WHERE email = "${this.username}" AND password = "${this.password}"`
-        const result = await conn.query(q).catch()
+        let q = `SELECT * FROM ${this.#table} WHERE username = '${this.username}' AND password = '${this.password}'`
+        const result = await conn.query(q)
         return {result}
     }
 
