@@ -1,15 +1,13 @@
-require("dotenv").config()
 const jwt = require("jsonwebtoken")
 
 exports.login = async (req, res)=>{
     try{
-        const username = req.body.username
+        const username = req.body.username || "Guest"
         const uid = req.body.uid
         const maxAge = 30 * 24 * 60 * 60
         const token = await jwt.sign({
                         "id": uid,
                         "username": username,
-                        "room_id": NaN,
                         "key_private": NaN,
                         "stage":[
                             {

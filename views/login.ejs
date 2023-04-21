@@ -22,10 +22,21 @@
     </div>
     <%- include("../partials/footer") -%>
     <script>
+        const socket = io()
         socket.on("connect", function(){
             $("input[type='hidden']").val(socket.id)
         })
-        
+        $(document).ready(function(){
+            $("form").submit(function(e){
+                e.preventDefault()
+                axios.post("/api/v1/login", {username: $("#username").val()}).then(function(res){
+                    const username = $("input[name='username']").val()
+                    const token = res.data.accessToken
+                    socket.emit("user:login", {id: token, name: username, room_id: null})
+                    localStorage.setItem("accessToken", token)
+                })
+            })
+        })
     </script>
 </body>
 </html>

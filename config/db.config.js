@@ -64,8 +64,8 @@ class Conn {
       const result = await mssql.query(q)
       return {sts: 1, msg: result}
     } catch (err) {
-      console.log(err)
-      return {sts:0, msg: []}
+      // console.log(err.originalError)
+      return {sts:0, msg: err.originalError}
     }
   }
 }

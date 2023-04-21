@@ -3,24 +3,18 @@ const conn = require("../config/db.config")
 class User{
     #table = "users"
     constructor(
-        {id=null,
-        name = null,
-        room_id = null,
-        score = null,
-        status=1,
-        username=null,
-        password=null,}
+        {
+            id=null,
+            name = null,
+            score = null,
+            status=1
+        }
     ){
         this.id = id
         this.name = name
-        this.room_id = room_id
         this.score = score
         this.status = status
-        this.stage = {
-            cur: 0,
-        }
-        this.username = username
-        this.password = password
+        this.stage = []
     }
 
     create(){
@@ -34,7 +28,7 @@ class User{
     async login(){
         let q = `SELECT * FROM ${this.#table} WHERE username = '${this.username}' AND password = '${this.password}'`
         const result = await conn.query(q)
-        return {result}
+        return result
     }
 
     async get(where = {}){
