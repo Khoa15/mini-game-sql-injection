@@ -14,7 +14,7 @@ class User{
         this.name = name
         this.score = score
         this.status = status
-        this.stage = []
+        this.stage = {curStage: 0, info: []}
     }
 
     create(){

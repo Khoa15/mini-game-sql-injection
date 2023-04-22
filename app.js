@@ -44,11 +44,15 @@ const onConnection = (socket) => {
     socket.on("user:login", user.login)
     socket.on("user:update:room", user.update_room)
     socket.on("user:next-stage", user.next_stage)
+    socket.on("admin:user:list", user.update_room)
     socket.on("admin:start", ()=>{
         io.emit("admin:start")
     })
 
-    // socket.on("disconnect", user.logout(socket.id))
+
+    // socket.on("disconnecting", (reason)=>{
+    //     io.emit("user:disconnect", socket.id)
+    // })
 }
 
 io.on("connection", onConnection)

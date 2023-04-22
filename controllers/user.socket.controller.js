@@ -22,16 +22,30 @@ function UserSocket(io, stage){
     }
 
     const update_room = (room_id) => {
-        room_id = status.room_id
-        io.emit("user:list", stage.getCurStage()["users"] || [])
-        return users[room_id]
+        io.emit("user:list", stage.users || [])
+        return stage.users
     }
 
     const next_stage = async ({info, accessToken}) =>{
-        // console.log(info)
-        // const decoded = await jwt.verify(accessToken, process.env.PRIVATE_KEY)
-        console.log(stage.users.find(u => u.id == accessToken), info, "===============")
-        // stage.getCurStage()["users"][stage.getCurStage()["users"].findIndex(u => u.id == accessToken)].stage.cur += 1
+        try{
+            const uindex = stage.users.findIndex(u => u.id == accessToken)
+            const user = stage.users[uindex]
+            user.stage.info.push({ stage: info.currStage, submit: info.submit})
+            user.stage.curStage = info.currStage
+            stage.users[uindex] = user
+            console.log("=============Next stage")
+            console.log(stage.users[uindex])
+            console.log("SUBMIT===")
+            console.log(stage.users[uindex].stage)
+            console.log("=============./Next stage")
+        }catch(err){
+            console.log(err)
+        }
+    }
+
+    const list = () => {
+        // io.emit("admin:user:list", stage.users)
+        return stage.users
     }
 
     return{
@@ -39,7 +53,8 @@ function UserSocket(io, stage){
         find,
         logout,
         update_room,
-        next_stage
+        next_stage,
+        list
     }
 }
 

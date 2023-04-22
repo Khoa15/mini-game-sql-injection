@@ -60,6 +60,9 @@ $(document).ready(function(){
         }
         $("#box-your-data-form").html(JSON.stringify(formData, null, 4))
         user["submit"].push(formData)
+        if(user['submit'].length > 3){
+            user['submit'].shift()
+        }
         sendRequest(formData)
     })
     $("#btn-bf-th").click(async function(){
