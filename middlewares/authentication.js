@@ -5,6 +5,10 @@ exports.authentication = async (req, res, next) =>{
     // if("accessToken" in req.cookies){
     //     const token = req.cookies["accessToken"]
     //     const decoded = await jwt.verify(token, process.env.PRIVATE_KEY)
+    //     if(decoded.username == "Guest"){
+    //         next()
+    //         return
+    //     }
     //     if (req.originalUrl === "/"){
     //         res.redirect("/exercise")
     //         return

@@ -1,40 +1,25 @@
 const jwt = require("jsonwebtoken")
-
+const User = require("../models/user.model")
 exports.login = async (req, res)=>{
+    
     try{
-        const username = req.body.username || "Guest"
+        const username = req.body.username// || "Guest"
+        if (username == undefined){
+            throw "Username is missed"
+        }
         const uid = req.body.uid
         const maxAge = 30 * 24 * 60 * 60
-        const token = await jwt.sign({
-                        "id": uid,
-                        "username": username,
-                        "key_private": NaN,
-                        "stage":[
-                            {
-                                "status": false,
-                                "endTime": 0,
-                            },
-                            {
-                                "status": false,
-                                "endTime": 0,
-                            },
-                            {
-                                "status": false,
-                                "endTime": 0,
-                            },
-                            {
-                                "status": false,
-                                "endTime": 0,
-                            },
-                            {
-                                "status": false,
-                                "endTime": 0,
-                            },
-                        ]
-                    }, process.env.PRIVATE_KEY,
-                    {
-                        expiresIn: maxAge
-                    })
+        const user = {
+            id: uid,
+            name: username,
+            score: 0,
+            status: 0,
+            stage: {curStage: 0, info: []}
+        }
+        const token = await jwt.sign(user, process.env.PRIVATE_KEY,
+            {
+                expiresIn: maxAge
+            })            
         res.cookie("accessToken", token, {expiresIn: maxAge * 1000})
         res.send({
             "sts": 1,

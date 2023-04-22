@@ -1,4 +1,5 @@
 const socket = io()
+const startStage = Date.now()
 const user ={
     currStage: Number(window.location.pathname[18]),
     stage: [
@@ -97,7 +98,7 @@ $(document).ready(function(){
     })
     $("#btn-next-stage").click(function(){
         console.log(user, localStorage.getItem("accessToken"))
-        socket.emit("user:next-stage", {info: user, accessToken: localStorage.getItem("accessToken")})
+        socket.emit("user:next-stage", {info: { stage: user.currStage, submit: user.submit, timing: Date.now()-startStage}, accessToken: localStorage.getItem("accessToken")})
         // window.location = $(this).attr("href")
     })
 })

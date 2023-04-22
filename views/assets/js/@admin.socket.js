@@ -90,7 +90,7 @@ function appendUserOnStage(user, cStage = 1){
         <span id="b-username">${user["name"]}</span>
         <span class="vr mx-2"></span>
         <a href="#">
-            ${user["stage"].cur ? Pill("text-danger") : errorPill}
+            ${user["stage"].cur ? Pill("text-success") : errorPill}
         </a>
     </span>
     `

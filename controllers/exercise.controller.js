@@ -21,6 +21,7 @@ exports.stage_view = async (req, res, next) => {
                 status: decoded["stage"][stage-1],
             }
             console.log("Stage: "+stage)
+            console.log(decoded)
             console.log("=======================")
             res.status(200).render("test/stage", {data})
         }else{

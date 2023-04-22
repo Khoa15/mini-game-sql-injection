@@ -7,9 +7,21 @@ function UserSocket(io, stage){
         if (stage.users.length > 30) return false
         const user = new User(msg)
         stage.appendUser(user)
-        console.log(stage.users)
         io.emit("user:get", [user])
         return [user]
+    }
+
+    const reconnect = async (cookies)=>{
+        try{
+            let cookie = cookies.split(";")
+            let token = cookie.map(c => c.split("="))
+            token = token.find(t => t[0] == "accessToken")[1]
+            delete cookie, token
+            const decoded = await jwt.verify(token, process.env.PRIVATE_KEY)
+            console.log("Welcome: ", decoded.name)
+        }catch(err){
+            console.log(err)
+        }
     }
 
     const find = (id) => {
@@ -29,9 +41,13 @@ function UserSocket(io, stage){
     const next_stage = async ({info, accessToken}) =>{
         try{
             const uindex = stage.users.findIndex(u => u.id == accessToken)
+            if(uindex){
+                throw "User doesn't exist!"
+            }
             const user = stage.users[uindex]
-            user.stage.info.push({ stage: info.currStage, submit: info.submit})
-            user.stage.curStage = info.currStage
+            if(info.submit.length == 0) return false
+            user.stage.info.push(info)
+            user.stage.curStage = info.stage
             stage.users[uindex] = user
             console.log("=============Next stage")
             console.log(stage.users[uindex])
@@ -50,11 +66,12 @@ function UserSocket(io, stage){
 
     return{
         login,
+        reconnect,
         find,
         logout,
         update_room,
         next_stage,
-        list
+        list,
     }
 }
 

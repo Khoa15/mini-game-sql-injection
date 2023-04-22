@@ -40,7 +40,13 @@ const onConnection = (socket) => {
         socket.disconnect()
         return
     }
-    
+
+    //User connected
+    if(socket.handshake.headers.cookie){
+        // console.log(socket.handshake.headers)
+        user.reconnect(socket.handshake.headers.cookie)
+    }
+
     socket.on("user:login", user.login)
     socket.on("user:update:room", user.update_room)
     socket.on("user:next-stage", user.next_stage)
@@ -50,9 +56,9 @@ const onConnection = (socket) => {
     })
 
 
-    // socket.on("disconnecting", (reason)=>{
-    //     io.emit("user:disconnect", socket.id)
-    // })
+    socket.on("disconnecting", ()=>{
+        //socket.handshake.headers.cookie -> get cookie
+    })
 }
 
 io.on("connection", onConnection)

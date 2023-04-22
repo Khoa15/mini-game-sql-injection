@@ -30,7 +30,10 @@
         $(document).ready(function(){
             $("form").submit(function(e){
                 e.preventDefault()
-                axios.post("/api/v1/login", {username: $("#username").val()}).then(function(res){
+                axios.post("/api/v1/login", {
+                    uid: $("#uid").val(),
+                    username: $("input[name='username']").val()
+                }).then(function(res){
                     const username = $("input[name='username']").val()
                     const token = res.data.accessToken
                     socket.emit("user:login", {id: token, name: username, room_id: null})
