@@ -46,7 +46,7 @@ exports.signIn = async(req, res, next) =>{
         const maxAge = 30*24*60*60
         const token = jwt.sign({
             "username": "admin",
-            "room_id": NaN,
+            "permission": 5,
             "key_private": "123Admin456",
         }, process.env.PRIVATE_KEY,
         {

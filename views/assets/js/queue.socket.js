@@ -7,13 +7,14 @@ let users = {
     data: []
 }
 let user = {}
-if(form_login.length){
+// if(form_login.length){
     
-}
+// }
 async function addUserQueue(data = []){
-    console.log(data)
-    data.forEach(q => console.log(q))
     data.forEach(q=>{
+        if(users['data'].find(u => u.id == q.id)){
+            return false
+        }
         users["data"].push(q)
         users.count += 1
         queue.append(`
@@ -38,6 +39,10 @@ socket.on("user:get", (res)=>{
     }
 })
 socket.on("admin:start", ()=>{
-    users.data[users.data.findIndex(u => u.id == localStorage.getItem("accessToken"))].stage.cur = 1
-    window.location = "/exercise/1/stage/1"
+    try{
+        users.data[users.data.findIndex(u => u.id == localStorage.getItem("uid"))].stage.curStage = 1
+        window.location = "/exercise/1/stage/1"
+    }catch(err){
+        console.log(err)
+    }
 })

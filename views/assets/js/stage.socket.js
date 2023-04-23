@@ -97,10 +97,10 @@ $(document).ready(function(){
         }
     })
     $("#btn-next-stage").click(function(){
-        console.log(user, localStorage.getItem("accessToken"))
-        socket.emit("user:next-stage", {info: { stage: user.currStage, submit: user.submit, timing: Date.now()-startStage}, accessToken: localStorage.getItem("accessToken")})
-        // window.location = $(this).attr("href")
+        socket.emit("user:next-stage", {info: { stage: user.currStage, submit: user.submit, timing: Date.now()-startStage}, uid: localStorage.getItem("uid")})
+        window.location = $(this).attr("href")
     })
+
 })
 
 function sendRequest(formData){

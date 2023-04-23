@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-lg-4 col-sm-12 col-md-6 mx-auto mt-5">
                 <form id="form_login" action="<%= data.link_action %>" method="post">
-                    <input type="hidden" value="" id="uid">
+                    <input type="hidden" value="" name="id" id="uid">
                     <div class="input-group">
                         <input type="text" name="username" placeholder="Type your name" class="form-control" value="Khoa">
                         <!-- <input type="text" name="room_id" placeholder="Type id's room" class="form-control" value="R001"> -->
@@ -29,15 +29,17 @@
 
         $(document).ready(function(){
             $("form").submit(function(e){
+                const _id = $("#uid").val()
                 e.preventDefault()
                 axios.post("/api/v1/login", {
-                    uid: $("#uid").val(),
+                    uid: _id,
                     username: $("input[name='username']").val()
                 }).then(function(res){
                     const username = $("input[name='username']").val()
                     const token = res.data.accessToken
-                    socket.emit("user:login", {id: token, name: username, room_id: null})
+                    socket.emit("user:login", {id: _id, name: username})
                     localStorage.setItem("accessToken", token)
+                    localStorage.setItem("uid", socket.id)
                 })
             })
         })

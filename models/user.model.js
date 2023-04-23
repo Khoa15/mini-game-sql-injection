@@ -7,7 +7,9 @@ class User{
             id=null,
             name = null,
             score = null,
-            status=1
+            status=1,
+            username=null,
+            password=null
         }
     ){
         this.id = id
@@ -15,6 +17,8 @@ class User{
         this.score = score
         this.status = status
         this.stage = {curStage: 0, info: []}
+        this.username=username
+        this.password=password
     }
 
     create(){

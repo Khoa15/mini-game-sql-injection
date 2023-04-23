@@ -1,46 +1,17 @@
 const stage = {
-    cStage: 1,
-    data: [
-        {
-            "stage": 1,
-            "element": $("#l-user-st-1"),
-            "topic": "",
-            "status": {
-                "i": 0,
-                "data": ["Queue", "Fighting", "End"],
-            },
-            "users": []
-        },
-        {
-            "stage": 2,
-            "element": $("#l-user-st-2"),
-            "topic": "",
-            "status": ["Queue", "Fighting", "End"],
-            "users": []
-        },
-        {
-            "stage": 3,
-            "element": $("#l-user-st-3"),
-            "topic": "",
-            "status": ["Queue", "Fighting", "End"],
-            "users": []
-        },
-    ],
-    getCurrStage: function(){
-        return this.data[this.cStage - 1]
-    },
+    element: $("#l-user-st-1"),
+    re: $("#list-rank"),
+    users:[],
+    reel: (u) => `<li>${u.name} - ${u.timing}</li>`,
     append: function(user){
-        if(this.getCurrStage().users.find(u => u.id == user.id)){
-            return false
+        if(this.users.findIndex(u => u.id == user.id) == -1){
+            this.users.push(user)
+            return true
         }
-        this.data[currStage.cStage - 1]["users"].push(user)
-        return true
-    },
-    getElementHTML: function(stage){
-        return this.data[stage-1]["element"]
+        return false
     },
     start: function(){
-        socket.emit("admin:start", (this.cStage))
+        socket.emit("admin:start", 1)
     },
 }
 
@@ -60,12 +31,9 @@ function appendUser(user){
     user = {
         "id": user["id"],
         "name": user["name"],
-        "score": 0,
-        "time": 0,
-        "stage": {
-            cur: 0,
-            stage: []
-        }
+        "timing": 0,
+        "status": 0,
+        "submit": []
     }
     if(stage.append(user)){
         appendUserOnStage(user)
@@ -90,15 +58,16 @@ function appendUserOnStage(user, cStage = 1){
         <span id="b-username">${user["name"]}</span>
         <span class="vr mx-2"></span>
         <a href="#">
-            ${user["stage"].cur ? Pill("text-success") : errorPill}
+            ${user.status ? Pill("text-success") : errorPill}
         </a>
     </span>
     `
-    stage.getElementHTML(cStage).append(html)
+    stage.element.append(html)
+    stage.re.append(stage.reel(user))
 }
 
 function listUserOnStage(){
-    stage.getCurrStage().users.forEach(u => {
+    stage.users.forEach(u => {
         appendUserOnStage(u)
     })
 }
@@ -107,8 +76,25 @@ $(document).ready(function(){
     $("#btn-start-stage").click(function(){
         $("#btn-view-current-stage").text("Fighting")
         stage.start()
-        stage.getCurrStage().users.forEach(u => u["stage"].cur += 1)
-        stage.getElementHTML(1).html("")
+        stage.users.forEach(u => u.status = 1)
+        stage.element.html("")
         listUserOnStage()
     })
 })
+
+socket.on("admin:user:submit", ({info, uid})=>{
+    console.log(info, uid)
+})
+
+function sort(users = []){
+    users.sort(a,b => a.timing - b.timing)
+    return users
+}
+
+function printList(users = []){
+    const l = stage.re
+    l.html("")
+    for(let i = 0; i < users.length; i++){
+        l.append(stage.reel(user[i]))
+    }
+}

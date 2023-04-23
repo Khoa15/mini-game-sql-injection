@@ -16,9 +16,11 @@ function UserSocket(io, stage){
             let cookie = cookies.split(";")
             let token = cookie.map(c => c.split("="))
             token = token.find(t => t[0] == "accessToken")[1]
-            delete cookie, token
+            delete cookie
             const decoded = await jwt.verify(token, process.env.PRIVATE_KEY)
-            console.log("Welcome: ", decoded.name)
+            if(decoded.key_private != "123Admin456"){
+                login({"id":decoded.id, "name":decoded.username})
+            }
         }catch(err){
             console.log(err)
         }
@@ -33,14 +35,14 @@ function UserSocket(io, stage){
         return users.find(id)
     }
 
-    const update_room = (room_id) => {
+    const update_room = () => {
         io.emit("user:list", stage.users || [])
         return stage.users
     }
 
-    const next_stage = async ({info, accessToken}) =>{
+    const next_stage = async ({info, uid}) =>{
         try{
-            const uindex = stage.users.findIndex(u => u.id == accessToken)
+            const uindex = stage.users.findIndex(u => u.id == uid)
             if(uindex){
                 throw "User doesn't exist!"
             }
@@ -54,6 +56,7 @@ function UserSocket(io, stage){
             console.log("SUBMIT===")
             console.log(stage.users[uindex].stage)
             console.log("=============./Next stage")
+            io.emit("admin:user:submit", ({info, uid}))
         }catch(err){
             console.log(err)
         }

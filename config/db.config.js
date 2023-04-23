@@ -60,7 +60,6 @@ class Conn {
   async query(q) {
     try {
       await mssql.connect(this.sqlConfig)
-      console.log(q)
       const result = await mssql.query(q)
       return {sts: 1, msg: result}
     } catch (err) {

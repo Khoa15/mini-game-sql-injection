@@ -70,7 +70,9 @@ const Stage = {
         return this.info[cStage - 1]
     },
     appendUser: function(user , cStage=this.curStage){
-        this.users.push(user)
+        if(this.users.findIndex(u => u.id == user.id) == -1){
+            this.users.push(user)
+        }
     },
     updateUser: function(user){
         
