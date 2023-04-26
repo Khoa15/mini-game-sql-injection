@@ -72,6 +72,7 @@ const Stage = {
     appendUser: function(user , cStage=this.curStage){
         if(this.users.findIndex(u => u.id == user.id) == -1){
             this.users.push(user)
+            this.users.sort((a, b) => a.name.localeCompare(b.name))
         }
     },
     updateUser: function(user){

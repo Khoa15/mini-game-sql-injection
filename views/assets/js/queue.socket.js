@@ -19,7 +19,7 @@ async function addUserQueue(data = []){
         users.count += 1
         queue.append(`
         <div class="col">
-            <p class="text-center py-3 px-3 border ${ q["status"] == 0 ? "text-secondary" :"shadow" } animate__animated  animate__wobble">
+            <p class="text-center py-3 px-3 border shadow ${(q.id == localStorage.getItem("uid")) ? "text-danger" : ""} animate__animated  animate__wobble">
                 ${q["name"]}
             </p>
         </div>`)
