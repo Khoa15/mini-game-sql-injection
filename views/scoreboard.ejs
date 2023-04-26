@@ -8,18 +8,69 @@
     <div class="container">
         <table class="table table-striped">
             <thead>
-                <th>RANK</th>
                 <th>Name</th>
                 <th>Timing</th>
+                <th></th>
             </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Khoa</td>
-                    <td>0.0s</td>
-                </tr>
+            <tbody id="l-score">
             </tbody>
         </table>
     </div>
+    <%- include("../partials/footer") -%>
+    <script src="/assets/js/anisort.min.js"></script>
+    <script>
+        const socket = io()
+        const node = (name, timing) => {
+            return `
+                <tr>
+                    <td>${name}</td>
+                    <td>${Math.round(timing / 10 / 60) / 100}"</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary">View</button>
+                    </td>
+                </tr>
+            `
+        }
+        const board = {
+            users: [],
+            pushUser: function(u){
+                if(this.users.findIndex(t => t.id == u) != -1){
+                    return
+                }
+                this.users.push({
+                    id: u.id,
+                    name: u.name,
+                    stage: u.stage,
+                    timing: u.timing
+                })
+            },
+            pushListUser: function(list){
+                list.forEach(u => this.pushUser(u))
+            },
+            updateUser: function({info, uid}){
+                const uindex = this.users.findIndex(t => t.id == uid)
+                if(uindex == -1){
+                    return
+                }
+                this.users[uindex].timing = info.timing
+                this.users[uindex].stage = info.stage
+            },
+            updateBoard: async function(){
+                $("#l-score").empty()
+                this.users.forEach(u => $("#l-score").append(node(u.name, u.timing)))
+            }
+        }
+        socket.emit("admin:user:list")
+        socket.on("user:list", (us)=>{
+            board.pushListUser(us)
+            board.updateBoard()
+        })
+        socket.on("user:submit", ({info, uid})=>{
+            console.log(info, uid)
+            board.updateUser({info, uid})
+            board.updateBoard()
+        })
+
+    </script>
 </body>
 </html>

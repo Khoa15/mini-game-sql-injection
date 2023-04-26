@@ -37,6 +37,7 @@ function appendUser(user){
     }
     if(stage.append(user)){
         appendUserOnStage(user)
+        printList([user])
     }
 }
 
@@ -63,7 +64,6 @@ function appendUserOnStage(user, cStage = 1){
     </span>
     `
     stage.element.append(html)
-    stage.re.append(stage.reel(user))
 }
 
 function listUserOnStage(){
@@ -82,8 +82,21 @@ $(document).ready(function(){
     })
 })
 
-socket.on("admin:user:submit", ({info, uid})=>{
+socket.on("user:submit", ({info, uid})=>{
     console.log(info, uid)
+    const uindex = stage.users.findIndex(u => u.id == uid)
+    if(uindex == -1){
+        return false
+    }
+    if(info.stage == 5){
+        stage.users[uindex].status = 3
+        return
+    }
+    stage.users[uindex].submit.push({
+        "stage": info.stage,
+        "info": info.submit,
+    })
+    stage.users[uindex].timing += info.timing
 })
 
 function sort(users = []){
@@ -95,6 +108,6 @@ function printList(users = []){
     const l = stage.re
     l.html("")
     for(let i = 0; i < users.length; i++){
-        l.append(stage.reel(user[i]))
+        l.append(stage.reel(users[i]))
     }
 }

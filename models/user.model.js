@@ -6,7 +6,7 @@ class User{
         {
             id=null,
             name = null,
-            score = null,
+            timing = 0,
             status=1,
             username=null,
             password=null
@@ -14,7 +14,7 @@ class User{
     ){
         this.id = id
         this.name = name
-        this.score = score
+        this.timing = timing
         this.status = status
         this.stage = {curStage: 0, info: []}
         this.username=username

@@ -38,7 +38,7 @@
                         <p class="text-success">Sloved</p>
                     <% } %>
                     <button class="btn btn-primary rounded-5">Submit</button>
-                    <% if(data.stage == 4){ %>
+                    <% if(data.stage == 5){ %>
                         <button type="button" id="btn-next-stage" class="btn btn-link" href="/scoreboard">Done</button>
                     <% }else{ %>
                         <button type="button" id="btn-next-stage" class="btn btn-link" href="/exercise/1/stage/<%= Number(data.stage) + 1 %>">Next</button>

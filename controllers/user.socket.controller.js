@@ -21,6 +21,7 @@ function UserSocket(io, stage){
             if(decoded.key_private != "123Admin456"){
                 login({"id":decoded.id, "name":decoded.username})
             }
+            console.log("Welcome: ", decoded.username)
         }catch(err){
             console.log(err)
         }
@@ -43,20 +44,16 @@ function UserSocket(io, stage){
     const next_stage = async ({info, uid}) =>{
         try{
             const uindex = stage.users.findIndex(u => u.id == uid)
-            if(uindex){
+            console.log(info, uid, uindex)
+            if(uindex == -1){
                 throw "User doesn't exist!"
             }
             const user = stage.users[uindex]
-            if(info.submit.length == 0) return false
             user.stage.info.push(info)
             user.stage.curStage = info.stage
+            stage.users[uindex].timing += info.timing
             stage.users[uindex] = user
-            console.log("=============Next stage")
-            console.log(stage.users[uindex])
-            console.log("SUBMIT===")
-            console.log(stage.users[uindex].stage)
-            console.log("=============./Next stage")
-            io.emit("admin:user:submit", ({info, uid}))
+            io.emit("user:submit", ({info, uid}))
         }catch(err){
             console.log(err)
         }
