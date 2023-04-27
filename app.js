@@ -52,12 +52,18 @@ const onConnection = (socket) => {
     socket.on("user:next-stage", user.next_stage)
     socket.on("admin:user:list", user.update_room)
     socket.on("admin:start", ()=>{
+        stage.status = 1
+        stage.users.forEach(u => u.status = 2)
         io.emit("admin:start")
     })
 
+    socket.on("user:send:mail", (data)=>{
+        io.emit("admin:receive:mail", data)
+    })
 
-    socket.on("disconnecting", ()=>{
-        //socket.handshake.headers.cookie -> get cookie
+
+    socket.on("disconnecting", async ()=>{
+        await user.disconnect(socket.handshake.headers.cookie)
     })
 }
 

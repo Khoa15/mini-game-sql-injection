@@ -70,13 +70,37 @@ const Stage = {
         return this.info[cStage - 1]
     },
     appendUser: function(user , cStage=this.curStage){
-        if(this.users.findIndex(u => u.id == user.id) == -1){
+        const uindex = this.users.findIndex(u => u.id == user.id)
+        if(uindex == -1){
             this.users.push(user)
+            this.ttUsers += 1
             this.users.sort((a, b) => a.name.localeCompare(b.name))
+        }else{
+            this.users[uindex].status = 1
         }
     },
     updateUser: function(user){
         
+    },
+    deleteUser: function(uid){
+        const uindex = this.users.findIndex(u => u.id == uid && u.status == 0)
+        if(uindex == -1){
+            return false
+        }
+        delete this.users[uindex]
+        this.ttUsers -= 1
+        this.users = this.users.filter(u => u !== null)
+        return true
+    },
+    disconnect: async function(uid){
+        // if(this.users.findIndex(u => u.id == uid && u.status == 0) != -1){
+        //     console.log("Disconnecting after 3s")    
+        //     return await new Promise(resolve => setTimeout(()=>{
+        //         resolve(this.deleteUser(uid))
+        //     }, 10000))
+        // }
+        // return false
+        return false
     }
 }
 

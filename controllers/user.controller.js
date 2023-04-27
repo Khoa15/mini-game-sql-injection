@@ -10,28 +10,6 @@ exports.login = async (req, res)=>{
                         "username": username,
                         "permission": 1,
                         "key_private": null,
-                        "stage":[
-                            {
-                                "status": false,
-                                "timing": 0,
-                            },
-                            {
-                                "status": false,
-                                "timing": 0,
-                            },
-                            {
-                                "status": false,
-                                "timing": 0,
-                            },
-                            {
-                                "status": false,
-                                "timing": 0,
-                            },
-                            {
-                                "status": false,
-                                "timing": 0,
-                            },
-                        ]
                     }, process.env.PRIVATE_KEY,
                     {
                         expiresIn: maxAge

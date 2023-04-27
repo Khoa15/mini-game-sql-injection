@@ -40,6 +40,7 @@
                     socket.emit("user:login", {id: _id, name: username})
                     localStorage.setItem("accessToken", token)
                     localStorage.setItem("uid", socket.id)
+                    window.location = '/exercise'
                 })
             })
         })

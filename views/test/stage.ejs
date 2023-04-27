@@ -34,15 +34,13 @@
                         <label for="pass_st1">Password:</label>
                         <input type="password" id="pass_st1" name="password" class="form-control" placeholder="Type your password">
                     </div>
-                    <% if(data.status.status == 1){ %>
-                        <p class="text-success">Sloved</p>
-                    <% } %>
                     <button class="btn btn-primary rounded-5">Submit</button>
                     <% if(data.stage == 5){ %>
                         <button type="button" id="btn-next-stage" class="btn btn-link" href="/scoreboard">Done</button>
                     <% }else{ %>
                         <button type="button" id="btn-next-stage" class="btn btn-link" href="/exercise/1/stage/<%= Number(data.stage) + 1 %>">Next</button>
                     <% } %>
+                    <div id="hint-sql"></div>
                 </form>
             </div>
         </div>

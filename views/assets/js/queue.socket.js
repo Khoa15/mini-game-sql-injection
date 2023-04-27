@@ -4,12 +4,12 @@ const queue = $("#queue")
 let users = {
     count: 0,
     step: 0,
-    data: []
+    data: [],
+    findUser: function(uid){
+        return this.data.findIndex(u => u.id == uid)
+    }
 }
 let user = {}
-// if(form_login.length){
-    
-// }
 async function addUserQueue(data = []){
     data.forEach(q=>{
         if(users['data'].find(u => u.id == q.id)){
@@ -18,7 +18,7 @@ async function addUserQueue(data = []){
         users["data"].push(q)
         users.count += 1
         queue.append(`
-        <div class="col">
+        <div class="col" id=${q.id}>
             <p class="text-center py-3 px-3 border shadow ${(q.id == localStorage.getItem("uid")) ? "text-danger" : ""} animate__animated  animate__wobble">
                 ${q["name"]}
             </p>
@@ -40,9 +40,19 @@ socket.on("user:get", (res)=>{
 })
 socket.on("admin:start", ()=>{
     try{
-        users.data[users.data.findIndex(u => u.id == localStorage.getItem("uid"))].stage.curStage = 1
+        users.data[users.findUser(localStorage.getItem("uid"))].stage.curStage = 1
         window.location = "/exercise/1/stage/1"
     }catch(err){
         console.log(err)
     }
+})
+socket.on("user:disconnect", (uid)=>{
+    const uindex = users.findUser(uid)
+    if(uindex == -1){
+        return
+    }
+    delete users.data[uindex]
+    users.count -= 1
+    users.data = users.data.filter(u => u !== null)
+    $(`#${uid}`).remove()
 })

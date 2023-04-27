@@ -10,7 +10,6 @@
             <thead>
                 <th>Name</th>
                 <th>Timing</th>
-                <th></th>
             </thead>
             <tbody id="l-score">
             </tbody>
@@ -25,16 +24,13 @@
                 <tr>
                     <td>${name}</td>
                     <td>${Math.round(timing / 10 / 60) / 100}"</td>
-                    <td>
-                        <button class="btn btn-sm btn-primary">View</button>
-                    </td>
                 </tr>
             `
         }
         const board = {
             users: [],
             pushUser: function(u){
-                if(this.users.findIndex(t => t.id == u) != -1){
+                if(this.users.findIndex(t => t.id == u.id) != -1){
                     return
                 }
                 this.users.push({
@@ -56,6 +52,7 @@
                 this.users[uindex].stage = info.stage
             },
             updateBoard: async function(){
+                console.log(board.users)
                 $("#l-score").empty()
                 this.users.forEach(u => $("#l-score").append(node(u.name, u.timing)))
             }

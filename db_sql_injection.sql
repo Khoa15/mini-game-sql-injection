@@ -24,7 +24,7 @@ VALUES ('alice', 'jkl159'),
        ('ivan', 'vbn456'),
        ('judy', 'fgh789');
 
-
+INSERT INTO users (username, password) VALUES ('adminstrator', 'admin@123');
 
 
 CREATE TABLE keys (
@@ -46,3 +46,12 @@ BEGIN
     INSERT INTO keys (accessKey) VALUES (@accessKey);
     SET @i = @i + 1;
 END
+
+DECLARE @i INT = 1;
+DECLARE @randomString NVARCHAR(10) = '';
+WHILE @i <= 10
+BEGIN
+    SET @randomString = @randomString + SUBSTRING('abcdefghijklmnopqrstuvwxyz', CONVERT(INT, RAND(CHECKSUM(NEWID())) * 26) + 1, 1);
+    SET @i = @i + 1;
+END
+SELECT @randomString;

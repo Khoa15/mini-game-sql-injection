@@ -1,12 +1,11 @@
 <style>
-    .box-resize{
+    .box-resize {
         resize: both;
         overflow: auto;
         max-height: 100vh;
         z-index: 1;
         max-width: 100%;
     }
-
 </style>
 <div class="o-box bg-light position-absolute box-resize shadow-sm">
     <div class="px-5">
@@ -16,33 +15,72 @@
             <pre class="col-6" id="box-res-api"></pre>
         </div>
     </div>
-    <% if (data.stage == 4){ %>
-    <div class="px-5">
-        <h3 class="text-center"></h3>
-        <div class="row font-monospace">
-            <form>
-                <!-- <div class="form-group">
+    <% if (data.stage==4 || data.stage==3){ %>
+        <div class="px-5">
+            <h3 class="text-center"></h3>
+            <div class="row font-monospace">
+                <form>
+                    <!-- <div class="form-group">
                     <label for="">Select Type:</label>
                     <select name="" id="" class="form-control">
                         <option value="">Text</option>
                         <option value="">Number</option>
                     </select>
                 </div> -->
-                <div class="input-group mb-2">
-                    <input type="text" id="bf-th-letters" class="form-control" value="abcdefghijklmnopqrstuvwxyz0123456789" disabled title="Brute Force">
-                    <input type="number" id="bf-th-max" min="0" max="15" class="form-control" value="10" placeholder="max" title="Max Length Text">
-                    <button type="button" class="btn btn-secondary" id="btn-bf-th">Send</button>
-                </div>
-            </form>
-            <table id="list-response">
-                <thead>
-                    <th>Timing</th>
-                    <th>Letters</th>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+                    <div class="input-group mb-2">
+                        <input type="text" id="bf-th-letters" class="form-control"
+                            value="abcdefghijklmnopqrstuvwxyz0123456789" disabled title="Brute Force">
+                        <input type="number" id="bf-th-max" min="0" max="15" class="form-control" value="10"
+                            placeholder="max" title="Max Length Text">
+                        <button type="button" class="btn btn-secondary" id="btn-bf-th">Send</button>
+                    </div>
+                </form>
+                <input type="text" class="form-control" id="filter-res">
+                <table id="list-response" class="table table-striped">
+                    <thead>
+                        <th>Timing</th>
+                        <th>Boolean</th>
+                        <th>Letters</th>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <% } %>
+</div>
+<div class="position-absolute bottom-0 end-0">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mail">
+        <i class="bi bi-envelope"></i>
+    </button>
+</div>
+<div class="modal fade" id="mail">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Send to admin</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <textarea id="content-mail" cols="30" rows="3" class="form-control mb-2"></textarea>
+                <button class="btn btn-primary" onclick="sendMail()">Send</button>
+            </div>
         </div>
     </div>
-    <% } %>
 </div>
+<script>
+    $(document).ready(function () {
+        $("#filter-res").on("keypress", function () {
+            var value = $(this).val().toLowerCase()
+            $("#list-response tbody tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            })
+        })
+    })
+    function sendMail(){
+        const content = $("#content-mail").val()
+        const uid = localStorage.getItem("uid")
+        socket.emit("user:send:mail", {content, uid})
+        console.log(content)
+    }
+</script>

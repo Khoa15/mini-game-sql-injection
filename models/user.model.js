@@ -15,7 +15,7 @@ class User{
         this.id = id
         this.name = name
         this.timing = timing
-        this.status = status
+        this.status = status // 0: offline, 1: online, queue, 2: fight, 3: done}
         this.stage = {curStage: 0, info: []}
         this.username=username
         this.password=password
@@ -30,7 +30,8 @@ class User{
     }
 
     async login(){
-        let q = `SELECT * FROM ${this.#table} WHERE username = '${this.username}' AND password = '${this.password}'`
+        let q = `SELECT username FROM ${this.#table} WHERE username = '${this.username}' AND password = '${this.password}'`
+        console.log(q)
         const result = await conn.query(q)
         return result
     }

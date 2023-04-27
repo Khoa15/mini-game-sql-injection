@@ -18,7 +18,6 @@ exports.stage_view = async (req, res, next) => {
             const data = {
                 title: 'Stage '+stage,
                 stage: stage,
-                status: decoded["stage"][stage-1],
             }
             console.log("Stage: "+stage)
             console.log("=======================")
@@ -28,6 +27,7 @@ exports.stage_view = async (req, res, next) => {
         }
         return
     }catch(err){
+        console.log(err)
         res.json(err)
     }
 }
@@ -49,6 +49,7 @@ exports.stage_submit = async (req, res, next) => {
             const password = req.body['password']
             const user = new User({username: username, password: password})
             const result = await user.login()
+            console.log(result.msg.recordsets)
             let response = {sts: result.sts, data: [], message: ""}
             if(result.sts == 0){
                 // Error for Error based sqli
@@ -56,6 +57,9 @@ exports.stage_submit = async (req, res, next) => {
             }else{
                 if(stage == 2){
                     response.data = result.msg.recordset
+                }
+                if(stage == 3){
+                    response.data = result.msg.recordset.length > 0
                 }
             }
             // response["message"] = "Failed"
