@@ -40,8 +40,8 @@ var Connection = require('tedious').Connection;
 Enable TCP/TP
 */
 const DATABASE = "sql_injection"
-const USER = "test_sql"//sa
-const PASSWORD = "test_sql"//123
+const USER = "sa"//sa
+const PASSWORD = "123"//123
 const SERVER = "localhost"//DESKTOP-L3D0UJ9\\SQLEXPRESS
 class Conn {
   constructor() {
@@ -52,6 +52,7 @@ class Conn {
       password: PASSWORD,
       options: {
         encrypt: false,
+        trustServerCertificate: true
       }
     }
 

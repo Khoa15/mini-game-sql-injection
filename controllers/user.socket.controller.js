@@ -4,10 +4,15 @@ const jwt = require("jsonwebtoken")
 function UserSocket(io, stage){
 
     const splitCookieToken = (cookies)=>{
-        let cookie = cookies.split(";")
-        let token = cookie.map(c => c.split("="))
-        token = token.find(t => t[0] == "accessToken")[1]
-        return token
+        try{
+            let cookie = cookies.split(";")
+            let token = cookie.map(c => c.split("="))
+            token = token.find(t => t[0] == "accessToken")[1]
+            return token
+
+        }catch(e){
+            return NaN;
+        }
     }
 
     const verify = async (token) => {

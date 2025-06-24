@@ -24,7 +24,9 @@ const exerciseRoute = require("./routes/exercise.route")
 const apiRoute = require("./routes/api.route")
 const { handleError } = require("./middlewares/handleError")
 
-app.use(cors())
+app.use(cors({
+    origin: "*"
+}))
 app.use("/", userRoute)
 app.use("/control", adminRoute)
 app.use("/exercise", exerciseRoute)
